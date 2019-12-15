@@ -1,46 +1,64 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet } from "react-native";
+import { View, TextInput, Button, StyleSheet, Modal } from "react-native";
 
 const GoalInput = props => {
+  const [enteredGoal, setEnteredGoal] = useState("");
 
-    const [enteredGoal, setEnteredGoal] = useState("");
+  const goalInputHandler = enteredText => {
+    setEnteredGoal(enteredText);
+  };
 
-    const goalInputHandler = enteredText => {
-        setEnteredGoal(enteredText);
-    };
-    
-    const addGoalHandler = () => {
-    props.setCourseGoals([...(props.courseGoals), { id: Math.random().toString(), value: enteredGoal }]);
-    }
+  const addGoalHandler = () => {
+    props.setCourseGoals([
+      ...props.courseGoals,
+      { id: Math.random().toString(), value: enteredGoal }
+    ]);
+    setEnteredGoal("");
+    props.setIsAddMode(false);
+  };
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        placeholder="Course Goal"
-        style={styles.input}
-        onChangeText={goalInputHandler}
-        value={enteredGoal}
-      />
-      <Button title="ADD" style={styles.addButton} onPress={addGoalHandler} />
-    </View>
+    <Modal visible={props.visible} animationType="slide">
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Course Goal"
+          style={styles.input}
+          onChangeText={goalInputHandler}
+          value={enteredGoal}
+        />
+        <View style={styles.buttons}>
+          <View style={styles.button}>
+            <Button title="CANCEL" color="red" onPress={props.cancel} />
+          </View>
+          <View style={styles.button}>
+            <Button title="ADD" onPress={addGoalHandler} />
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center"
   },
   input: {
     width: "80%",
     borderColor: "black",
     borderWidth: 1,
-    padding: 10
+    padding: 10,
+    marginBottom: 10
   },
-  addButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 40
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "60%"
+  },
+  button: {
+    width: "40%"
   }
 });
 
