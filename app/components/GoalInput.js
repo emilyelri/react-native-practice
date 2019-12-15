@@ -9,6 +9,9 @@ const GoalInput = props => {
   };
 
   const addGoalHandler = () => {
+    if(enteredGoal.length == 0) {
+      return;
+    }
     props.setCourseGoals([
       ...props.courseGoals,
       { id: Math.random().toString(), value: enteredGoal }
